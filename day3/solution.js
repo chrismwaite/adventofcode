@@ -1,32 +1,64 @@
-//const input = "325489";
-
-//326041
-const input = 62;
+const input = 325489;
 
 (function() {
   let grid_size_x=1;
   let grid_size_y=1;
-  let previous_value=1;
+  let bottom_right_value=1;
   let layer=0;
   
-  while(previous_value<input) {
+  while(bottom_right_value<input) {
     grid_size_x+=2;
     grid_size_y+=2;
     layer++;
-    previous_value=grid_size_x*grid_size_y;
+    bottom_right_value=grid_size_x*grid_size_y;
   }
 
-  let diff = previous_value-input;
+  //bottom right coordinates
+  x_coord = layer;
+  y_coord = -layer;
 
+  let diff = bottom_right_value-input;
+  let sides = Math.floor(diff/(grid_size_x-1));
+  let units = diff%(grid_size_x-1);
 
-  //then (x1,y1)(x1,y1) and (x2,y2)=|x2−x1|+|y2−y1| ((6,2) and (3,7) would be |3−6|+|7−2|=3+5=8 units)
-  console.log(layer);
-  console.log(grid_size_x);
-  console.log(diff);
-  //console.log("You are at x:" + Math.abs(x_coord) + " y:" + y_coord);
-  //console.log(previous_value);
-  //console.log(x);
-  //console.log(input/x);
+  let direction = "left";
+
+  for(let x=0; x<sides; x++) {
+    if(x==0) {
+      x_coord -= (grid_size_x-1);
+      direction = "left";
+    }
+    else if(x==1) {
+      y_coord += (grid_size_x-1);
+      direction = "up";
+    }
+    else if(x==2) {
+      x_coord += (grid_size_x-1);
+      direction = "right";
+    }
+    else if(x==3) {
+      y_coord -= (grid_size_x-1);
+      direction = "down";
+    }
+  }
+
+  if(direction == "left") {
+    y_coord += units;
+  }
+  else if(direction == "up") {
+    x_coord += units;
+  }
+  else if(direction == "right") {
+    y_coord -= units;
+  }
+  else if(direction == "down") {
+    x_coord -= units;
+  }
+
+  let steps = Math.abs(x_coord+y_coord);
+
+  console.log("Number is at x:" + x_coord + " y:" + y_coord);
+  console.log(steps);
 })();
 
 
